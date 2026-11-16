@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aspire High | Employee Time Clock</title>
+<style>
+:root{--navy:#0f2347;--maroon:#8a1538;--bg:#f3f5f9;--line:#dfe3ea;--muted:#667085}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#1c2430}
+header{background:var(--navy);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.brand b{font-size:22px;letter-spacing:2px}.brand small{display:block;font-size:11px;letter-spacing:1.5px;opacity:.85}
+.tag{font-style:italic;opacity:.9}
+.banner{background:var(--maroon);color:#fff;padding:22px 20px}
+.banner h1{margin:0 0 4px;font-size:26px}.banner p{margin:0;opacity:.9;font-size:14px}
+main{max-width:760px;margin:0 auto;padding:16px}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tabs button{flex:1;padding:12px;border:1px solid var(--line);background:#fff;border-radius:10px;font-weight:600;cursor:pointer;color:var(--navy)}
+.tabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+.card h2{font-size:17px;margin:0 0 4px;color:var(--navy)}
+.card .sub{color:var(--muted);font-size:13px;margin-bottom:12px}
+.num{display:inline-block;width:24px;height:24px;border-radius:50%;background:var(--maroon);color:#fff;text-align:center;line-height:24px;font-size:13px;margin-right:8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+label{font-size:13px;font-weight:600;display:block;margin-bottom:4px}
+label i{color:var(--maroon);font-style:normal}
+input[type=text],input[type=date],input[type=time],select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff}
+textarea{min-height:90px;resize:vertical}
+.radios{display:flex;gap:18px;padding-top:8px}
+.radios label{font-weight:500;display:flex;gap:6px;align-items:center;margin:0}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.act{padding:14px;border-radius:10px;border:2px solid var(--line);background:#fff;font-weight:700;cursor:pointer;font-size:16px}
+.act.in.on{background:#16a34a;border-color:#16a34a;color:#fff}
+.act.out.on{background:var(--maroon);border-color:var(--maroon);color:#fff}
+.submit{width:100%;padding:15px;border:0;border-radius:10px;background:var(--maroon);color:#fff;font-size:16px;font-weight:700;cursor:pointer}
+.submit:disabled{opacity:.6}
+.msg{padding:12px;border-radius:10px;margin-top:12px;display:none;font-size:14px}
+.msg.ok{display:block;background:#e7f6ec;color:#14532d}.msg.err{display:block;background:#fde8e8;color:#7f1d1d}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:18px;letter-spacing:2px}
+.hidden{display:none}
+
+.ic,.h-ic,.big-ic,.b-ic{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.banner{display:flex;gap:16px;align-items:center}
+.big-ic{width:56px;height:56px;padding:12px;border:2px solid #fff;border-radius:50%}
+.h-ic{width:20px;height:20px;vertical-align:-4px;margin-right:6px;color:var(--maroon)}
+.b-ic{width:20px;height:20px}
+.f{position:relative}
+.f .ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted);pointer-events:none}
+.f input,.f select{padding-left:36px}
+.act,.submit,.tabs button{display:flex;gap:8px;align-items:center;justify-content:center}
+.fixico{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--maroon);color:#fff;margin-right:8px;vertical-align:middle}
+.fixico .b-ic{width:18px;height:18px}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.info{grid-template-columns:1fr}}
+.info .card{display:flex;gap:12px;align-items:center;margin:0;font-size:13px;color:var(--muted)}
+.info .ic{width:32px;height:32px;color:var(--maroon)}
+.info b{color:var(--navy);display:block;font-size:14px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="i-id" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M13 10h5M13 14h5"/></symbol>
+<symbol id="i-building" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></symbol>
+<symbol id="i-note" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></symbol>
+</defs></svg>
+<header>
+  <div class="brand"><b>ASPIRE HIGH</b><small>YOUTH DEVELOPMENT INC.</small></div>
+  <div class="tag">Empower · Educate · Elevate</div>
+</header>
+<div class="banner"><svg class="big-ic"><use href="#i-clock"/></svg><div><h1>Employee Time Clock</h1><p>Record your work hours accurately and securely. Entries are used by HR to maintain accurate time records.</p></div></div>
+
+<main>
+  <div class="tabs">
+    <button class="on" id="tabClock"><svg class="b-ic"><use href="#i-clock"/></svg>Clock In / Out</button>
+    <button id="tabFix"><svg class="b-ic"><use href="#i-alert"/></svg>Missed Punch / Correction</button>
+  </div>
+
+  <!-- CLOCK FORM -->
+  <form id="clockForm" novalidate>
+    <div class="card">
+      <h2><span class="num">1</span><svg class="h-ic"><use href="#i-user"/></svg>Employee Information</h2><div class="sub">Tell us about yourself.</div>
+      <div class="grid">
+        <div><label>Employee Name <i>*</i></label><div class="f"><svg class="ic"><use href="#i-user"/></svg><input type="text" id="name" placeholder="Enter your full name"></div></div>
+        <div><label>Employee ID Number <i>*</i></label><div class="f"><svg class="ic"><use href="#i-id"/></svg><input type="text" id="empId" placeholder="Enter your employee ID"></div></div>
+        <div><label>College / Campus <i>*</i></label>
+          <div class="f"><svg class="ic"><use href="#i-building"/></svg><select id="campus"><option value="">Select your college or campus</option><option>Campus 1</option><option>Campus 2</option><option>Campus 3</option><option>Other</option></select></div></div>
+        <div><label>Work Type <i>*</i></label>
+          <div class="radios"><label><input type="radio" name="wt" value="Work Study" checked> Work Study</label><label><input type="radio" name="wt" value="Unpaid Intern"> Unpaid Intern</label></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="num">2</span><svg class="h-ic"><use href="#i-clock"/></svg>Clock Action</h2><div class="sub">Select the action you are performing.</div>
+      <div class="actions"><button type="button" class="act in on" data-a="Clock IN"><svg class="b-ic"><use href="#i-plus"/></svg>Clock IN</button><button type="button" class="act out" data-a="Clock OUT"><svg class="b-ic"><use href="#i-clock"/></svg>Clock OUT</button></div>
+    </div>
+    <div class="card">
+      <h2><span class="num">3</span><svg class="h-ic"><use href="#i-note"/></svg>Notes (Optional)</h2><div class="sub">Add any additional notes (special circumstances, location, etc.).</div>
+      <textarea id="notes" maxlength="500" placeholder="Type your notes here..."></textarea>
+    </div>
+    <button class="submit" id="sendClock" type="submit"><svg class="b-ic"><use href="#i-send"/></svg>Submit Time Entry</button>
+    <div class="msg" id="msgClock"></div>
+  </form>
+
+  <!-- CORRECTION FORM -->
+  <form id="fixForm" class="hidden" novalidate>
+    <div class="card">
+      <h2><span class="fixico"><svg class="b-ic"><use href="#i-alert"/></svg></span>Missed Punch / Correction Request</h2><div class="sub">Use this section if you need to report a missed clock-in/out or request a correction.</div>
+      <div class="grid">
+        <div><label>Employee Name <i>*</i></label><div class="f"><svg class="ic"><use href="#i-user"/></svg><input type="text" id="fName"></div></div>
+        <div><label>Employee ID Number <i>*</i></label><div class="f"><svg class="ic"><use href="#i-id"/></svg><input type="text" id="fId"></div></div>
+        <div><label>Reason for Correction <i>*</i></label>
+          <select id="fReason"><option value="">Select reason</option><option>Forgot to clock in</option><option>Forgot to clock out</option><option>Wrong time recorded</option><option>Technical issue</option><option>Other</option></select></div>
+        <div><label>Missed Date <i>*</i></label><div class="f"><svg class="ic"><use href="#i-cal"/></svg><input type="date" id="fDate"></div></div>
+        <div><label>Missed Clock-In Time</label><div class="f"><svg class="ic"><use href="#i-clock"/></svg><input type="time" id="fIn"></div></div>
+        <div><label>Missed Clock-Out Time</label><div class="f"><svg class="ic"><use href="#i-clock"/></svg><input type="time" id="fOut"></div></div>
+      </div>
+      <div style="margin-top:12px"><label>Explanation / Additional Details <i>*</i></label><textarea id="fWhy" maxlength="500" placeholder="Please provide a brief explanation..."></textarea></div>
+    </div>
+    <button class="submit" id="sendFix" type="submit"><svg class="b-ic"><use href="#i-send"/></svg>Submit Request</button>
+    <div class="msg" id="msgFix"></div>
+  </form>
+  <div class="info">
+    <div class="card"><svg class="ic"><use href="#i-cal"/></svg><div><b>Accurate time records</b>support our mission and our people.</div></div>
+    <div class="card"><svg class="ic"><use href="#i-users"/></svg><div><b>Need help?</b>Contact the HR team.</div></div>
+  </div>
+</main>
+<footer>TECHNOLOGY · PEOPLE · PROGRESS</footer>
+
+<script>
+// PASTE your Google Apps Script web app URL here (see setup steps):
+const SCRIPT_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+const $ = id => document.getElementById(id);
+let action = "Clock IN";
+
+$("tabClock").onclick = () => show(true);
+$("tabFix").onclick = () => show(false);
+function show(clock){
+  $("clockForm").classList.toggle("hidden", !clock);
+  $("fixForm").classList.toggle("hidden", clock);
+  $("tabClock").classList.toggle("on", clock);
+  $("tabFix").classList.toggle("on", !clock);
+}
+document.querySelectorAll(".act").forEach(b => b.onclick = () => {
+  action = b.dataset.a;
+  document.querySelectorAll(".act").forEach(x => x.classList.toggle("on", x === b));
+});
+
+function flash(el, ok, text){ el.className = "msg " + (ok ? "ok" : "err"); el.textContent = text; }
+
+async function send(payload, btn, msgEl, form){
+  if (SCRIPT_URL.startsWith("PASTE")) return flash(msgEl, false, "Setup needed: add the Apps Script URL in index.html.");
+  const orig = btn.innerHTML; btn.disabled = true; btn.textContent = "Submitting...";
+  try {
+    // text/plain avoids a CORS preflight; Apps Script still receives the body
+    await fetch(SCRIPT_URL, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+    flash(msgEl, true, "Submitted at " + new Date().toLocaleTimeString() + ". Thank you!");
+    form.reset();
+  } catch (e) {
+    flash(msgEl, false, "Could not submit. Check your connection and try again.");
+  }
+  btn.disabled = false; btn.innerHTML = orig;
+}
+
+$("clockForm").onsubmit = e => {
+  e.preventDefault();
+  const d = { type:"clock", name:$("name").value.trim(), empId:$("empId").value.trim(), campus:$("campus").value,
+    workType:document.querySelector("input[name=wt]:checked").value, action, notes:$("notes").value.trim() };
+  if (!d.name || !d.empId || !d.campus) return flash($("msgClock"), false, "Please fill in name, employee ID, and campus.");
+  send(d, $("sendClock"), $("msgClock"), $("clockForm"));
+};
+
+$("fixForm").onsubmit = e => {
+  e.preventDefault();
+  const d = { type:"correction", name:$("fName").value.trim(), empId:$("fId").value.trim(), reason:$("fReason").value,
+    date:$("fDate").value, timeIn:$("fIn").value, timeOut:$("fOut").value, details:$("fWhy").value.trim() };
+  if (!d.name || !d.empId || !d.reason || !d.date || !d.details) return flash($("msgFix"), false, "Please complete all required fields.");
+  send(d, $("sendFix"), $("msgFix"), $("fixForm"));
+};
+</script>
+</body>
+</html>
